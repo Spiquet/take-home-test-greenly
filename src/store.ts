@@ -1,12 +1,7 @@
-export class DiscountOffer {
-  constructor(partnerName, expiresIn, discountRateInPercent) {
-    this.partnerName = partnerName;
-    this.expiresIn = expiresIn;
-    this.discountInPercent = discountRateInPercent;
-  }
-}
+import { DiscountOffer } from "./discountOffer";
 
 export class Store {
+  public discountOffers: DiscountOffer[];
   constructor(discountOffers = []) {
     this.discountOffers = discountOffers;
   }
