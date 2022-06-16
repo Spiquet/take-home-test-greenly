@@ -8,6 +8,9 @@ export const DiscountOffers = new Map([
       if (discountInPercent < 50) {
         expiresIn < 0 ? (discountInPercent += 2) : (discountInPercent += 1);
       }
+      if (discountInPercent > 50) {
+        discountInPercent = 50
+      }
       return { expiresIn, discountInPercent };
     }
   ],
@@ -26,8 +29,14 @@ export const DiscountOffers = new Map([
         discountInPercent = discountInPercent + 1;
         expiresIn < 11 && (discountInPercent += 1);
         expiresIn < 6 && (discountInPercent += 1);
-        expiresIn < 0 && (discountInPercent = 0);
       }
+      if (expiresIn < 0) {
+        discountInPercent = 0
+      }
+      if (discountInPercent > 50) {
+        discountInPercent = 50
+      }
+
       return { expiresIn, discountInPercent };
     }
   ]
