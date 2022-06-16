@@ -77,23 +77,45 @@ describe("Store", () => {
         ).toEqual([new DiscountOffer("Vinted", -2, 0)]);
       });
     });
+
+    describe("BackMarket", () => {
+      it("should not decrease the discount when it's at 0", () => {
+        expect(
+          new Store([new DiscountOffer("BackMarket", 10, 0)]).updateDiscounts()
+        ).toEqual([new DiscountOffer("BackMarket", 9, 0)]);
+      });
+
+      it("should decrease the discount by two and expiresIn", () => {
+        expect(
+          new Store([new DiscountOffer("BackMarket", 2, 3)]).updateDiscounts()
+        ).toEqual([new DiscountOffer("BackMarket", 1, 1)]);
+      });
+
+      it("should decrease the discount by four after the expiration date", () => {
+        expect(
+          new Store([new DiscountOffer("BackMarket", -1, 20)]).updateDiscounts()
+        ).toEqual([new DiscountOffer("BackMarket", -2, 16)]);
+      });
+    });
   });
 
-  it("should check the raw discount simulation has the same output as the old version", () => {
-    const discountOffers = [
-      new DiscountOffer("Velib", 20, 30),
-      new DiscountOffer("Naturalia", 10, 5),
-      new DiscountOffer("Vinted", 5, 40),
-      new DiscountOffer("Ilek", 15, 40)
-    ];
+  describe("No regression test", () => {
+    it("should check the raw discount simulation has the same output as the old version", () => {
+      const discountOffers = [
+        new DiscountOffer("Velib", 20, 30),
+        new DiscountOffer("Naturalia", 10, 5),
+        new DiscountOffer("Vinted", 5, 40),
+        new DiscountOffer("Ilek", 15, 40)
+      ];
 
-    let output = JSON.parse(`[${fs.readFileSync("output.txt").toString()}]`);
-    const store = new Store(discountOffers);
-    const newLogs: DiscountOffer[] = [];
+      let output = JSON.parse(`[${fs.readFileSync("output.txt").toString()}]`);
+      const store = new Store(discountOffers);
+      const newLogs: DiscountOffer[] = [];
 
-    for (let elapsedDays = 0; elapsedDays < 30; elapsedDays++) {
-      newLogs.push(JSON.parse(JSON.stringify(store.updateDiscounts())));
-    }
-    expect(newLogs).toStrictEqual(output);
+      for (let elapsedDays = 0; elapsedDays < 30; elapsedDays++) {
+        newLogs.push(JSON.parse(JSON.stringify(store.updateDiscounts())));
+      }
+      expect(newLogs).toStrictEqual(output);
+    });
   });
 })
