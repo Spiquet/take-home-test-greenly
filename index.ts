@@ -1,6 +1,7 @@
-import { Store, DiscountOffer } from "./store";
-
 import fs from "fs";
+import { DiscountOffer } from "./src/discountOffer";
+import { Store } from "./src/store";
+
 
 const discountOffers = [
   new DiscountOffer("Velib", 20, 30),
@@ -10,14 +11,14 @@ const discountOffers = [
 ];
 const store = new Store(discountOffers);
 
-const log = [];
+const log: string[] = [];
 
 for (let elapsedDays = 0; elapsedDays < 30; elapsedDays++) {
   log.push(JSON.stringify(store.updateDiscounts()));
 }
 
 /* eslint-disable no-console */
-fs.writeFile("output.txt", log, err => {
+fs.writeFile("output.txt", log.join(','), err => {
   if (err) {
     console.log("error");
   } else {
