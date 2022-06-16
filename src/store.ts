@@ -39,6 +39,16 @@ export const DiscountOffers = new Map([
 
       return { expiresIn, discountInPercent };
     }
+  ],
+  [
+    "BackMarket",
+    (expiresIn: number, discountInPercent: number) => {
+      expiresIn = expiresIn - 1;
+      if (discountInPercent > 0) {
+        expiresIn < 0 ? (discountInPercent -= 4) : (discountInPercent -= 2);
+      }
+      return { expiresIn, discountInPercent };
+    }
   ]
 ]);
 
